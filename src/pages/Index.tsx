@@ -28,8 +28,8 @@ const Index = () => {
   ];
 
   const [videoStats, setVideoStats] = useState({
-    1: { views: 12547, duration: '5:23' },
-    2: { views: 8932, duration: '3:45' }
+    1: { views: 12547, duration: '5:23', publishedAt: '15 октября 2024' },
+    2: { views: 8932, duration: '3:45', publishedAt: '10 октября 2024' }
   });
 
   const videos = [
@@ -174,6 +174,10 @@ const Index = () => {
                         <div className="flex items-center gap-1.5">
                           <Icon name="Eye" size={16} />
                           <span>{videoStats[video.id as keyof typeof videoStats].views.toLocaleString('ru-RU')} просмотров</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Icon name="Calendar" size={16} />
+                          <span>{videoStats[video.id as keyof typeof videoStats].publishedAt}</span>
                         </div>
                       </div>
                     </div>
