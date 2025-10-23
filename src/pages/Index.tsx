@@ -27,6 +27,11 @@ const Index = () => {
     { id: 'contact', label: 'Контакты' }
   ];
 
+  const [videoStats, setVideoStats] = useState({
+    1: { views: 12547, duration: '5:23' },
+    2: { views: 8932, duration: '3:45' }
+  });
+
   const videos = [
     {
       id: 1,
@@ -43,6 +48,16 @@ const Index = () => {
       url: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     }
   ];
+
+  const handleVideoPlay = (videoId: number) => {
+    setVideoStats(prev => ({
+      ...prev,
+      [videoId]: {
+        ...prev[videoId as keyof typeof prev],
+        views: prev[videoId as keyof typeof prev].views + 1
+      }
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,12 +140,15 @@ const Index = () => {
                   <CardContent className="p-0">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <div className="relative aspect-video bg-slate-100 cursor-pointer">
+                        <div className="relative aspect-video bg-slate-100 cursor-pointer" onClick={() => handleVideoPlay(video.id)}>
                           <img 
                             src={video.thumbnail}
                             alt={video.title}
                             className="w-full h-full object-cover"
                           />
+                          <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-white text-sm font-medium">
+                            {videoStats[video.id as keyof typeof videoStats].duration}
+                          </div>
                           <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group">
                             <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                               <Icon name="Play" className="text-white ml-1" size={24} />
@@ -151,7 +169,13 @@ const Index = () => {
                     </Dialog>
                     <div className="p-6">
                       <h3 className="text-xl font-semibold mb-2">{video.title}</h3>
-                      <p className="text-muted-foreground">{video.description}</p>
+                      <p className="text-muted-foreground mb-4">{video.description}</p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1.5">
+                          <Icon name="Eye" size={16} />
+                          <span>{videoStats[video.id as keyof typeof videoStats].views.toLocaleString('ru-RU')} просмотров</span>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
