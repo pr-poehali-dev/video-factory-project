@@ -4,14 +4,33 @@ import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [currentVideo, setCurrentVideo] = useState<string | null>(null);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const videos = [
+    {
+      id: 1,
+      title: 'Производственная линия',
+      description: 'Автоматизированные процессы нового поколения',
+      thumbnail: 'https://cdn.poehali.dev/projects/bcab3a77-4471-41b6-ab21-782d49555bbf/files/5beea5be-04c7-4ef0-a4c4-67e3d4979672.jpg',
+      url: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+    },
+    {
+      id: 2,
+      title: 'Контроль качества AI',
+      description: 'Визуальная инспекция в реальном времени',
+      thumbnail: 'https://cdn.poehali.dev/projects/bcab3a77-4471-41b6-ab21-782d49555bbf/files/9d657345-0b99-468b-9645-78a75d0a88e6.jpg',
+      url: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,47 +90,42 @@ const Index = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              <Card className="overflow-hidden animate-scale-in hover:shadow-lg transition-shadow">
-                <CardContent className="p-0">
-                  <div className="relative aspect-video bg-slate-100">
-                    <img 
-                      src="https://cdn.poehali.dev/projects/bcab3a77-4471-41b6-ab21-782d49555bbf/files/5beea5be-04c7-4ef0-a4c4-67e3d4979672.jpg"
-                      alt="AI Factory Production"
-                      className="w-full h-full object-cover"
-                    />
-                    <button className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group">
-                      <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Icon name="Play" className="text-white ml-1" size={24} />
-                      </div>
-                    </button>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">Производственная линия</h3>
-                    <p className="text-muted-foreground">Автоматизированные процессы нового поколения</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="overflow-hidden animate-scale-in hover:shadow-lg transition-shadow" style={{ animationDelay: '0.1s' }}>
-                <CardContent className="p-0">
-                  <div className="relative aspect-video bg-slate-100">
-                    <img 
-                      src="https://cdn.poehali.dev/projects/bcab3a77-4471-41b6-ab21-782d49555bbf/files/9d657345-0b99-468b-9645-78a75d0a88e6.jpg"
-                      alt="AI Quality Control"
-                      className="w-full h-full object-cover"
-                    />
-                    <button className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group">
-                      <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Icon name="Play" className="text-white ml-1" size={24} />
-                      </div>
-                    </button>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">Контроль качества AI</h3>
-                    <p className="text-muted-foreground">Визуальная инспекция в реальном времени</p>
-                  </div>
-                </CardContent>
-              </Card>
+              {videos.map((video, idx) => (
+                <Card key={video.id} className="overflow-hidden animate-scale-in hover:shadow-lg transition-shadow" style={{ animationDelay: `${idx * 0.1}s` }}>
+                  <CardContent className="p-0">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="relative aspect-video bg-slate-100 cursor-pointer">
+                          <img 
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group">
+                            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <Icon name="Play" className="text-white ml-1" size={24} />
+                            </div>
+                          </div>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl w-full p-0">
+                        <div className="aspect-video w-full">
+                          <iframe
+                            src={video.url}
+                            className="w-full h-full rounded-lg"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold mb-2">{video.title}</h3>
+                      <p className="text-muted-foreground">{video.description}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
