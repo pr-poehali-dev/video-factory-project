@@ -5,15 +5,27 @@ import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [currentVideo, setCurrentVideo] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
+    setIsMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const menuItems = [
+    { id: 'home', label: 'Главная' },
+    { id: 'video', label: 'Видео' },
+    { id: 'products', label: 'Продукция' },
+    { id: 'tech', label: 'Технологии' },
+    { id: 'about', label: 'О заводе' },
+    { id: 'contact', label: 'Контакты' }
+  ];
 
   const videos = [
     {
@@ -38,15 +50,9 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-heading font-bold text-secondary">AI FACTORY</h1>
+            
             <div className="hidden md:flex items-center gap-8">
-              {[
-                { id: 'home', label: 'Главная' },
-                { id: 'video', label: 'Видео' },
-                { id: 'products', label: 'Продукция' },
-                { id: 'tech', label: 'Технологии' },
-                { id: 'about', label: 'О заводе' },
-                { id: 'contact', label: 'Контакты' }
-              ].map((item) => (
+              {menuItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
@@ -58,6 +64,30 @@ const Index = () => {
                 </button>
               ))}
             </div>
+
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon">
+                  <Icon name="Menu" size={24} />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <div className="flex flex-col gap-6 mt-8">
+                  <h2 className="text-2xl font-heading font-bold text-secondary mb-4">Меню</h2>
+                  {menuItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className={`text-left text-lg font-medium transition-colors hover:text-primary py-2 ${
+                        activeSection === item.id ? 'text-primary' : 'text-foreground'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
